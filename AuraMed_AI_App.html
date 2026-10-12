@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AuraMed AI — Intelligent Medical Help, Chatbot & Clinical Triage System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: radial-gradient(circle at top right, #dff8fd 0%, #f4fdff 45%, #ffffff 100%);
+      color: #1e293b;
+      overflow-x: hidden;
+    }
+
+    /* Keyframe Animations */
+    @keyframes fadeInUp {
+      0% { opacity: 0; transform: translateY(20px) scale(0.98); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-14px) rotate(2deg); }
+    }
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      15% { transform: scale(1.18); }
+      30% { transform: scale(1); }
+      45% { transform: scale(1.18); }
+    }
+    @keyframes shimmerSweep {
+      0% { transform: translateX(-140%) skewX(-18deg); }
+      100% { transform: translateX(240%) skewX(-18deg); }
+    }
+    @keyframes typingBounce {
+      0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+      40% { transform: translateY(-6px); opacity: 1; }
+    }
+    @keyframes red-glow {
+      0% { box-shadow: 0 0 12px rgba(239, 68, 68, 0.35); }
+      100% { box-shadow: 0 0 34px rgba(239, 68, 68, 0.8); }
+    }
+
+    .animate-fade-in-up { animation: fadeInUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .animate-float-slow { animation: floatSlow 6s ease-in-out infinite; }
+    .animate-heartbeat { animation: heartbeat 2.2s ease-in-out infinite; }
+
+    /* Interactive Hover Effects */
+    .hover-lift-card {
+      transition: all 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .hover-lift-card:hover {
+      transform: translateY(-6px) scale(1.01);
+      box-shadow: 0 22px 42px -12px rgba(0, 201, 255, 0.26), 0 0 15px 0 rgba(6, 182, 212, 0.12);
+      border-color: #22d3ee !important;
+    }
+
+    .hover-pill-glow {
+      transition: all 0.22s ease;
+    }
+    .hover-pill-glow:hover {
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 6px 18px -3px rgba(6, 182, 212, 0.32);
+    }
+
+    .aqua-gradient-btn {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #00c9ff 0%, #0099ff 55%, #0284c7 100%);
+      color: white;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .aqua-gradient-btn::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 45%; height: 100%;
+      background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.38) 50%, rgba(255,255,255,0) 100%);
+      transform: translateX(-150%) skewX(-20deg);
+    }
+    .aqua-gradient-btn:hover::after {
+      animation: shimmerSweep 0.85s ease forwards;
+    }
+    .aqua-gradient-btn:hover {
+      background: linear-gradient(135deg, #00b8eb 0%, #0088eb 55%, #0369a1 100%);
+      box-shadow: 0 12px 28px -5px rgba(0, 201, 255, 0.55);
+      transform: translateY(-2px) scale(1.01);
+    }
+
+    .aqua-gradient-text {
+      background: linear-gradient(135deg, #0284c7 0%, #00c9ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .emergency-pulse { animation: red-glow 1.2s infinite alternate; }
+    .dot-1 { animation: typingBounce 1.2s infinite 0s; }
+    .dot-2 { animation: typingBounce 1.2s infinite 0.2s; }
+    .dot-3 { animation: typingBounce 1.2s infinite 0.4s; }
+
+    @media print {
+      .no-print { display: none !important; }
+      body { background: #fff !important; }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-cyan-500 selection:text-white relative">
+
+  <!-- Ambient Floating Aqua Background Orbs -->
+  <div class="no-print pointer-events-none fixed inset-0 overflow-hidden z-0">
+    <div class="w-96 h-96 rounded-full bg-cyan-300/15 blur-3xl absolute -top-24 -left-24 animate-float-slow"></div>
+    <div class="w-96 h-96 rounded-full bg-sky-300/15 blur-3xl absolute top-1/3 -right-32 animate-float-slow" style="animation-delay: 2.5s;"></div>
+  </div>
+
+  <!-- TOP NAVIGATION BAR -->
+  <header class="no-print sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-cyan-100 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <div onclick="switchTab('triage')" class="flex items-center space-x-3 cursor-pointer group">
+        <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/30 text-white font-black text-2xl group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
+          <span class="animate-heartbeat">+</span>
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <span class="text-2xl font-extrabold tracking-tight bg-gradient-to-r from-cyan-600 to-blue-700 bg-clip-text text-transparent">AuraMed</span>
+            <span class="px-2 py-0.5 text-[11px] font-bold bg-cyan-100 text-cyan-800 rounded-full border border-cyan-200">AI CLINICAL</span>
+          </div>
+          <p class="text-xs text-slate-500 hidden sm:block">Intelligent Health Diagnosis, Chatbot & Safe Medicine Guidance</p>
+        </div>
+      </div>
+
+      <nav class="hidden lg:flex items-center space-x-1 bg-slate-50 p-1.5 rounded-2xl border border-slate-200">
+        <button id="nav-triage" onclick="switchTab('triage')" class="px-3.5 py-2 rounded-xl text-xs xl:text-sm font-bold bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-sm transition-all hover:-translate-y-0.5">AI Diagnosis</button>
+        <button id="nav-chatbot" onclick="switchTab('chatbot')" class="px-3.5 py-2 rounded-xl text-xs xl:text-sm font-semibold text-slate-600 hover:text-cyan-600 transition-all hover:-translate-y-0.5 flex items-center space-x-1.5">
+          <span>💬 AI Chat Doctor</span>
+          <span class="px-1.5 py-0.2 rounded-full bg-cyan-100 text-cyan-700 text-[10px] font-black">LIVE</span>
+        </button>
+        <button id="nav-bodymap" onclick="switchTab('bodymap')" class="px-3.5 py-2 rounded-xl text-xs xl:text-sm font-semibold text-slate-600 hover:text-cyan-600 transition-all hover:-translate-y-0.5">Body Map</button>
+        <button id="nav-safety" onclick="switchTab('safety')" class="px-3.5 py-2 rounded-xl text-xs xl:text-sm font-semibold text-slate-600 hover:text-cyan-600 transition-all hover:-translate-y-0.5">Medicine Safety</button>
+        <button id="nav-redflags" onclick="switchTab('redflags')" class="px-3.5 py-2 rounded-xl text-xs xl:text-sm font-semibold text-slate-600 hover:text-cyan-600 transition-all hover:-translate-y-0.5">Emergency Red Flags</button>
+        <button id="nav-history" onclick="switchTab('history')" class="px-3.5 py-2 rounded-xl text-xs xl:text-sm font-semibold text-slate-600 hover:text-cyan-600 transition-all hover:-translate-y-0.5">Health Records</button>
+      </nav>
+
+      <div class="flex items-center space-x-2">
+        <button onclick="openEmergencyModal()" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white text-xs sm:text-sm font-extrabold shadow-md shadow-red-500/20 hover:scale-105 transition-all flex items-center space-x-1.5">
+          <span>🚨 SOS EMERGENCY</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- PERSISTENT RED FLAG BANNER -->
+  <div id="top-emergency-banner" class="hidden no-print bg-gradient-to-r from-red-600 via-rose-600 to-red-700 text-white py-3.5 px-4 shadow-xl sticky top-20 z-30">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div class="flex items-center space-x-3">
+        <span class="px-2.5 py-0.5 rounded bg-white text-red-700 font-mono font-black text-xs uppercase">🚨 CRITICAL RED FLAG</span>
+        <p id="banner-condition-text" class="text-sm font-bold">Immediate Doctor / Hospital Emergency Intervention Required — Do Not Self-Medicate!</p>
+      </div>
+      <button onclick="openEmergencyModal()" class="bg-white text-red-700 px-4 py-1.5 rounded-xl text-xs font-black shadow hover:bg-red-50 shrink-0">
+        VIEW EMERGENCY PROTOCOL →
+      </button>
+    </div>
+  </div>
+
+  <!-- MAIN WORKSPACE -->
+  <main class="relative z-10 flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- TAB 1: AI TRIAGE & SYMPTOM INPUT -->
+    <section id="tab-triage" class="space-y-8 animate-fade-in-up">
+      <div id="input-view" class="space-y-8">
+        <div class="text-center max-w-3xl mx-auto space-y-3">
+          <div class="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-cyan-100/80 border border-cyan-200 text-cyan-800 text-xs font-bold hover-pill-glow">
+            <span>✨ NEXT-GEN AI MEDICAL TRIAGE SYSTEM • 2026–2027</span>
+          </div>
+          <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
+            Intelligent Health Diagnosis & <span class="aqua-gradient-text">Safe Medicine Guidance</span>
+          </h1>
+          <p class="text-slate-600 text-sm sm:text-base">
+            Describe your symptoms in plain English or chat with Dr. Aura AI. Our engine diagnoses probable conditions, screens for life-critical Red Flags with doctor referrals, and suggests safe Over-The-Counter medications.
+          </p>
+        </div>
+
+        <div class="bg-white rounded-3xl border border-cyan-100 shadow-xl shadow-cyan-500/5 p-6 sm:p-8 space-y-6 hover-lift-card">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+            <div>
+              <h2 class="text-xl sm:text-2xl font-black text-slate-900">Describe Your Health Issue</h2>
+              <p class="text-xs sm:text-sm text-slate-500">Enter symptoms below or tap a quick clinical test scenario</p>
+            </div>
+            <button onclick="resetForm()" class="text-xs font-bold text-slate-400 hover:text-cyan-600 px-3 py-1.5 rounded-lg border border-slate-200 hover-pill-glow">Reset Form</button>
+          </div>
+
+          <div id="selected-bodymap-pills" class="hidden p-3.5 rounded-2xl bg-cyan-50 border border-cyan-200 flex flex-wrap gap-2 items-center"></div>
+
+          <div>
+            <label class="block text-sm font-bold text-slate-800 mb-2">Patient Symptoms & Complaints:</label>
+            <textarea id="symptom-textarea" rows="4" class="w-full rounded-2xl border-2 border-slate-200 focus:border-cyan-500 hover:border-cyan-300 transition-all p-4 text-slate-800 text-sm sm:text-base outline-none bg-slate-50/40" placeholder="e.g., I have had a throbbing headache on one side with nausea since morning, or severe chest pain radiating to my left arm..."></textarea>
+          </div>
+
+          <!-- Sample Test Scenarios -->
+          <div class="space-y-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-400 block">Quick Demo Test Cases (Click to Load):</span>
+            <div class="flex flex-wrap gap-2">
+              <button onclick="loadSample('Severe crushing chest pain radiating to left arm with cold sweats and breathlessness', 9)" class="hover-pill-glow text-xs font-bold px-3 py-1.5 rounded-xl bg-red-50 text-red-700 border border-red-200 hover:bg-red-100">🚨 Cardiac Red Flag (Heart Attack)</button>
+              <button onclick="loadSample('Sudden weakness on right arm, facial drooping, and slurred speech since 20 minutes', 9)" class="hover-pill-glow text-xs font-bold px-3 py-1.5 rounded-xl bg-red-50 text-red-700 border border-red-200 hover:bg-red-100">🚨 Stroke Red Flag (FAST)</button>
+              <button onclick="loadSample('Severe lower right abdominal pain with rigid belly, high fever and vomiting', 9)" class="hover-pill-glow text-xs font-bold px-3 py-1.5 rounded-xl bg-red-50 text-red-700 border border-red-200 hover:bg-red-100">🚨 Acute Appendicitis Red Flag</button>
+              <button onclick="loadSample('High fever, severe body aches, shivering chills, and dry cough for 2 days', 6)" class="hover-pill-glow text-xs font-bold px-3 py-1.5 rounded-xl bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100">🤒 Influenza / Viral Fever</button>
+              <button onclick="loadSample('Burning chest sensation, sour belching, and acid regurgitation after eating oily food', 4)" class="hover-pill-glow text-xs font-bold px-3 py-1.5 rounded-xl bg-cyan-50 text-cyan-800 border border-cyan-200 hover:bg-cyan-100">🔥 Acid Reflux / GERD</button>
+              <button onclick="loadSample('One-sided throbbing headache with nausea and sensitivity to bright light', 6)" class="hover-pill-glow text-xs font-bold px-3 py-1.5 rounded-xl bg-cyan-50 text-cyan-800 border border-cyan-200 hover:bg-cyan-100">🧠 Migraine Headache</button>
+              <button onclick="loadSample('Continuous sneezing, watery eyes, runny nose, and itchy throat', 3)" class="hover-pill-glow text-xs font-bold px-3 py-1.5 rounded-xl bg-cyan-50 text-cyan-800 border border-cyan-200 hover:bg-cyan-100">🤧 Allergic Rhinitis / Cold</button>
+              <button onclick="loadSample('Watery diarrhea, stomach cramps, nausea and dehydration after outside meal', 6)" class="hover-pill-glow text-xs font-bold px-3 py-1.5 rounded-xl bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100">💧 Acute Gastroenteritis</button>
+            </div>
+          </div>
+
+          <!-- Severity, Duration & Age -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 bg-slate-50 p-5 rounded-2xl border border-slate-200">
+            <div>
+              <div class="flex justify-between text-xs font-bold mb-2">
+                <span class="text-slate-600 uppercase">Pain / Severity (1-10)</span>
+                <span id="severity-label" class="px-2 py-0.5 rounded bg-cyan-100 text-cyan-800 font-mono">4 / 10 (Moderate)</span>
+              </div>
+              <input id="severity-slider" type="range" min="1" max="10" value="4" oninput="updateSeverityLabel(this.value)" class="w-full accent-cyan-500 cursor-pointer" />
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold uppercase text-slate-600 mb-2">Symptom Duration</label>
+              <select id="duration-select" class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white text-sm font-semibold">
+                <option value="< 24 Hours">&lt; 24 Hours (Acute Onset)</option>
+                <option value="1-2 Days" selected>1–2 Days</option>
+                <option value="3-7 Days">3–7 Days</option>
+                <option value="> 1 Week">&gt; 1 Week</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold uppercase text-slate-600 mb-2">Patient Age (Years)</label>
+              <input id="patient-age" type="number" min="1" max="110" value="25" class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white text-sm font-semibold" />
+            </div>
+          </div>
+
+          <!-- Drug Allergy Checkboxes -->
+          <div class="space-y-2">
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500">Known Drug Allergies & Contraindications (Safety Filter):</label>
+            <div class="flex flex-wrap gap-3">
+              <label class="hover-pill-glow inline-flex items-center space-x-2 text-xs font-semibold bg-slate-50 px-3 py-2 rounded-xl border border-slate-200 cursor-pointer">
+                <input type="checkbox" value="Aspirin / NSAIDs" class="allergy-checkbox accent-red-600" />
+                <span>Allergic to Aspirin / NSAIDs (Ibuprofen)</span>
+              </label>
+              <label class="hover-pill-glow inline-flex items-center space-x-2 text-xs font-semibold bg-slate-50 px-3 py-2 rounded-xl border border-slate-200 cursor-pointer">
+                <input type="checkbox" value="Paracetamol" class="allergy-checkbox accent-red-600" />
+                <span>Allergic to Paracetamol</span>
+              </label>
+              <label class="hover-pill-glow inline-flex items-center space-x-2 text-xs font-semibold bg-slate-50 px-3 py-2 rounded-xl border border-slate-200 cursor-pointer">
+                <input type="checkbox" value="Gastric Ulcer" class="allergy-checkbox accent-amber-600" />
+                <span>History of Gastric Ulcer / Severe Acidity</span>
+              </label>
+              <label class="hover-pill-glow inline-flex items-center space-x-2 text-xs font-semibold bg-slate-50 px-3 py-2 rounded-xl border border-slate-200 cursor-pointer">
+                <input type="checkbox" value="Kidney Disease" class="allergy-checkbox accent-amber-600" />
+                <span>Chronic Kidney / Renal Issue</span>
+              </label>
+            </div>
+          </div>
+
+          <button onclick="runDiagnosis()" class="w-full py-4 rounded-2xl aqua-gradient-btn font-black text-base sm:text-lg tracking-wide shadow-xl">
+            🩺 ANALYZE SYMPTOMS & GENERATE AI DIAGNOSIS
+          </button>
+        </div>
+      </div>
+
+      <!-- DIAGNOSIS OUTPUT CONTAINER -->
+      <div id="result-view" class="hidden space-y-8 animate-fade-in-up"></div>
+    </section>
+
+    <!-- TAB 2: DEDICATED AI CHAT DOCTOR VIEW -->
+    <section id="tab-chatbot" class="hidden space-y-6 animate-fade-in-up">
+      <div class="bg-white rounded-3xl border border-cyan-200 shadow-2xl overflow-hidden flex flex-col h-[72vh] min-h-[540px]">
+        <div class="bg-gradient-to-r from-cyan-500 via-sky-500 to-blue-600 text-white px-6 py-4 flex items-center justify-between">
+          <div class="flex items-center space-x-3">
+            <div class="w-11 h-11 rounded-2xl bg-white/20 flex items-center justify-center text-2xl animate-bounce">🤖</div>
+            <div>
+              <h2 class="text-lg font-black">Dr. Aura — 24/7 AI Medical Chatbot</h2>
+              <p class="text-xs text-cyan-100">Ask about symptoms, OTC medicine dosages, drug safety, or emergency signs</p>
+            </div>
+          </div>
+          <button onclick="clearChatMessages()" class="text-xs font-bold bg-white/15 hover:bg-white/25 px-3 py-1.5 rounded-xl">Reset Chat</button>
+        </div>
+
+        <div id="page-chat-messages" class="flex-1 overflow-y-auto p-5 space-y-4 bg-gradient-to-b from-[#f4fcff] to-white"></div>
+
+        <div class="px-4 py-2 bg-slate-50 border-t border-cyan-100 flex items-center gap-2 overflow-x-auto">
+          <span class="text-xs font-bold text-cyan-700 shrink-0">Quick Ask:</span>
+          <button onclick="sendChatMessage('I have a throbbing migraine headache and nausea')" class="hover-pill-glow text-xs font-semibold px-3 py-1 rounded-full bg-cyan-50 text-cyan-800 border border-cyan-200 whitespace-nowrap">Migraine & Nausea</button>
+          <button onclick="sendChatMessage('Severe crushing chest pain and sweating')" class="hover-pill-glow text-xs font-semibold px-3 py-1 rounded-full bg-red-50 text-red-700 border border-red-200 whitespace-nowrap">🚨 Chest Pain Red Flag</button>
+          <button onclick="sendChatMessage('What is the safe dosage for Paracetamol?')" class="hover-pill-glow text-xs font-semibold px-3 py-1 rounded-full bg-cyan-50 text-cyan-800 border border-cyan-200 whitespace-nowrap">Paracetamol Dosage</button>
+          <button onclick="sendChatMessage('Burning stomach pain after eating spicy food')" class="hover-pill-glow text-xs font-semibold px-3 py-1 rounded-full bg-cyan-50 text-cyan-800 border border-cyan-200 whitespace-nowrap">Acidity / GERD</button>
+        </div>
+
+        <form onsubmit="event.preventDefault(); sendChatFromInput('page-chat-input');" class="p-4 bg-white border-t border-cyan-100 flex gap-2">
+          <input id="page-chat-input" type="text" placeholder="Type your symptoms or medicine question for Dr. Aura..." class="flex-1 px-4 py-3 rounded-xl border border-slate-200 focus:border-cyan-500 outline-none text-sm" />
+          <button type="submit" class="px-6 py-3 rounded-xl aqua-gradient-btn font-bold text-sm">Send ➤</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- TAB 3: INTERACTIVE BODY MAP -->
+    <section id="tab-bodymap" class="hidden space-y-6 animate-fade-in-up">
+      <div class="bg-white rounded-3xl border border-cyan-100 shadow-xl p-6 sm:p-8 space-y-6 hover-lift-card">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+          <div>
+            <span class="text-xs font-bold text-cyan-700 bg-cyan-50 px-3 py-1 rounded-full border border-cyan-200">ANATOMICAL SYMPTOM SELECTOR</span>
+            <h2 class="text-2xl font-black text-slate-900 mt-2">Select Symptoms by Body Region</h2>
+          </div>
+          <button onclick="switchTab('triage')" class="aqua-gradient-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold shadow">
+            Proceed to AI Diagnosis →
+          </button>
+        </div>
+        <div id="bodymap-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+      </div>
+    </section>
+
+    <!-- TAB 4: MEDICINE SAFETY CHECKER -->
+    <section id="tab-safety" class="hidden space-y-6 animate-fade-in-up">
+      <div class="bg-white rounded-3xl border border-cyan-100 shadow-xl p-6 sm:p-8 space-y-4">
+        <span class="text-xs font-bold text-cyan-700 bg-cyan-50 px-3 py-1 rounded-full border border-cyan-200">PHARMACOTHERAPY REFERENCE</span>
+        <h2 class="text-2xl font-black text-slate-900">Over-The-Counter Medicine Directory & Safety Guide</h2>
+        <p class="text-sm text-slate-500">Evidence-based reference of standard non-prescription medications, dosages, mechanisms, and contraindications.</p>
+        <div id="medicine-directory-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4"></div>
+      </div>
+    </section>
+
+    <!-- TAB 5: EMERGENCY RED FLAGS GUIDE -->
+    <section id="tab-redflags" class="hidden space-y-6 animate-fade-in-up">
+      <div class="bg-white rounded-3xl border border-red-200 shadow-xl p-6 sm:p-8 space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <span class="text-xs font-black text-red-700 bg-red-50 px-3 py-1 rounded-full border border-red-200 uppercase">CRITICAL TRIAGE EDUCATION</span>
+            <h2 class="text-2xl font-black text-slate-900 mt-2">Medical Red Flags & Life-Safety Protocols</h2>
+            <p class="text-sm text-slate-500">When these signs appear, self-medication must be avoided and immediate physician/hospital care is mandatory.</p>
+          </div>
+          <button onclick="playEmergencySiren()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow hover:scale-105 transition-all">
+            🔊 Test Clinical Siren Alert
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="p-6 rounded-2xl border-2 border-red-300 bg-red-50/40 space-y-2 hover-lift-card">
+            <h3 class="text-lg font-black text-red-900">1. Brain Stroke — F.A.S.T. Protocol</h3>
+            <p class="text-xs text-slate-600">Every minute of delay destroys 1.9 million brain neurons. Check:</p>
+            <ul class="text-xs sm:text-sm space-y-1 text-slate-800 font-medium list-disc list-inside">
+              <li><b>F (Face):</b> Does one side of the face droop when smiling?</li>
+              <li><b>A (Arms):</b> Does one arm drift downward when raised?</li>
+              <li><b>S (Speech):</b> Is speech slurred, garbled, or unable to speak?</li>
+              <li><b>T (Time):</b> Call <b>112 / 108 / 911</b> immediately! Do NOT give aspirin until CT rules out bleeding.</li>
+            </ul>
+          </div>
+
+          <div class="p-6 rounded-2xl border-2 border-rose-300 bg-rose-50/40 space-y-2 hover-lift-card">
+            <h3 class="text-lg font-black text-rose-900">2. Heart Attack vs. Heartburn</h3>
+            <p class="text-xs text-slate-600">Never dismiss crushing chest pressure as simple gastric acidity:</p>
+            <ul class="text-xs sm:text-sm space-y-1 text-slate-800 font-medium list-disc list-inside">
+              <li><b>Heart Attack:</b> Squeezing/crushing center chest tightness radiating to left arm, neck, or jaw + cold sweats & breathlessness.</li>
+              <li><b>Heartburn:</b> Rising burning feeling after spicy/oily meals, sour taste, relieved by antacids.</li>
+              <li><b>Action:</b> Call Ambulance immediately; chew 300mg Aspirin if advised and not allergic.</li>
+            </ul>
+          </div>
+
+          <div class="p-6 rounded-2xl border-2 border-purple-300 bg-purple-50/40 space-y-2 hover-lift-card">
+            <h3 class="text-lg font-black text-purple-900">3. Acute Meningitis & Thunderclap Headache</h3>
+            <ul class="text-xs sm:text-sm space-y-1 text-slate-800 font-medium list-disc list-inside">
+              <li>Sudden explosive "worst headache of life" reaches peak within 60 seconds.</li>
+              <li>High fever with stiff neck (unable to touch chin to chest) & photophobia.</li>
+              <li><b>Tumbler Test:</b> Red/purple skin spots that do NOT fade when a clear glass is pressed against them.</li>
+            </ul>
+          </div>
+
+          <div class="p-6 rounded-2xl border-2 border-amber-300 bg-amber-50/40 space-y-2 hover-lift-card">
+            <h3 class="text-lg font-black text-amber-900">4. Anaphylaxis & Airway Obstruction</h3>
+            <ul class="text-xs sm:text-sm space-y-1 text-slate-800 font-medium list-disc list-inside">
+              <li>Swelling of tongue, lips, or throat with hoarse voice or stridor wheezing.</li>
+              <li>Blue tint around lips/fingertips (cyanosis) or gasping for air.</li>
+              <li><b>Action:</b> Inject Epinephrine (EpiPen) into outer mid-thigh and call 112/108.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 6: CONSULTATION HISTORY -->
+    <section id="tab-history" class="hidden space-y-6 animate-fade-in-up">
+      <div class="bg-white rounded-3xl border border-cyan-100 shadow-xl p-6 sm:p-8 space-y-4">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-2xl font-black text-slate-900">Saved Consultation Records</h2>
+            <p class="text-xs sm:text-sm text-slate-500">Past assessments stored in your browser</p>
+          </div>
+          <button onclick="clearHistory()" class="text-xs font-bold text-red-600 bg-red-50 px-3 py-2 rounded-xl border border-red-200">Clear History</button>
+        </div>
+        <div id="history-list" class="space-y-3"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FLOATING AI CHATBOT WIDGET (BOTTOM RIGHT) -->
+  <div id="floating-chatbot-container" class="no-print fixed bottom-5 right-5 z-50">
+    <!-- Launcher Button -->
+    <button id="chatbot-launcher-btn" onclick="toggleFloatingChat(true)" class="flex items-center space-x-3 pl-4 pr-5 py-3.5 rounded-full aqua-gradient-btn text-white shadow-2xl border-2 border-white">
+      <span class="text-xl animate-heartbeat">💬</span>
+      <div class="text-left">
+        <span class="text-[10px] font-extrabold uppercase tracking-wider text-cyan-100 block leading-none">24/7 Medical AI</span>
+        <span class="text-sm font-black">Chat with Dr. Aura</span>
+      </div>
+    </button>
+
+    <!-- Floating Chat Window -->
+    <div id="floating-chat-window" class="hidden w-[92vw] sm:w-[400px] h-[540px] bg-white rounded-3xl border-2 border-cyan-200 shadow-2xl overflow-hidden flex flex-col animate-fade-in-up">
+      <div class="bg-gradient-to-r from-cyan-500 via-sky-500 to-blue-600 text-white px-4 py-3.5 flex items-center justify-between">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center text-lg animate-bounce">🤖</div>
+          <div>
+            <h4 class="font-black text-sm leading-tight">Dr. Aura AI Chatbot</h4>
+            <span class="text-[11px] text-cyan-100">Live Symptom & Medicine Triage</span>
+          </div>
+        </div>
+        <div class="flex items-center space-x-1">
+          <button onclick="clearChatMessages()" title="Reset Chat" class="p-1.5 rounded-lg hover:bg-white/15 text-xs">🗑️</button>
+          <button onclick="toggleFloatingChat(false)" title="Close" class="p-1.5 rounded-lg hover:bg-white/15 font-bold">✕</button>
+        </div>
+      </div>
+
+      <div id="floating-chat-messages" class="flex-1 overflow-y-auto p-4 space-y-3 bg-gradient-to-b from-[#f4fcff] to-white"></div>
+
+      <div class="px-3 py-1.5 bg-slate-50 border-t border-cyan-100 flex items-center gap-1.5 overflow-x-auto">
+        <button onclick="sendChatMessage('I have fever and body aches')" class="hover-pill-glow text-[11px] font-semibold px-2.5 py-1 rounded-full bg-cyan-50 text-cyan-800 border border-cyan-200 whitespace-nowrap">Fever & Body Ache</button>
+        <button onclick="sendChatMessage('Severe crushing chest pain')" class="hover-pill-glow text-[11px] font-semibold px-2.5 py-1 rounded-full bg-red-50 text-red-700 border border-red-200 whitespace-nowrap">🚨 Chest Pain</button>
+        <button onclick="sendChatMessage('Dosage for Cetirizine')" class="hover-pill-glow text-[11px] font-semibold px-2.5 py-1 rounded-full bg-cyan-50 text-cyan-800 border border-cyan-200 whitespace-nowrap">Cetirizine Dose</button>
+      </div>
+
+      <form onsubmit="event.preventDefault(); sendChatFromInput('floating-chat-input');" class="p-3 bg-white border-t border-cyan-100 flex gap-2">
+        <input id="floating-chat-input" type="text" placeholder="Ask Dr. Aura about symptoms or medicines..." class="flex-1 px-3.5 py-2 rounded-xl border border-slate-200 focus:border-cyan-500 outline-none text-xs" />
+        <button type="submit" class="px-4 py-2 rounded-xl aqua-gradient-btn font-bold text-xs">Send</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- EMERGENCY MODAL -->
+  <div id="emergency-modal" class="hidden fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-2xl w-full border-4 border-red-500 shadow-2xl overflow-hidden animate-fade-in-up">
+      <div class="bg-gradient-to-r from-red-600 to-rose-700 text-white p-6 flex items-start justify-between">
+        <div>
+          <span class="px-2.5 py-0.5 rounded-full bg-white text-red-700 font-mono text-xs font-black uppercase">🚨 HIGH-PRIORITY RED FLAG ALERT</span>
+          <h3 id="modal-rf-title" class="text-2xl font-black mt-2">Immediate Doctor / Hospital ER Required</h3>
+          <p id="modal-rf-condition" class="text-sm text-red-100 font-semibold mt-0.5">Critical Emergency Protocol Activated</p>
+        </div>
+        <button onclick="closeEmergencyModal()" class="text-white/80 hover:text-white font-bold text-xl px-2">✕</button>
+      </div>
+      <div class="p-6 space-y-4 max-h-[65vh] overflow-y-auto">
+        <div class="p-4 rounded-2xl bg-red-50 border border-red-200 text-red-900 text-sm font-bold" id="modal-rf-summary">
+          Do NOT self-medicate. Proceed immediately to the nearest Emergency Department or call an ambulance.
+        </div>
+        <div>
+          <h4 class="text-xs font-black uppercase text-slate-400 tracking-wider mb-2">Immediate Life-Safety First-Aid Steps:</h4>
+          <div id="modal-rf-steps" class="space-y-2 text-sm text-slate-800"></div>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">
+          <a href="tel:112" class="p-3 rounded-xl bg-red-600 text-white text-center font-black text-sm shadow hover:bg-red-700">📞 Call 112 (Emergency)</a>
+          <a href="tel:108" class="p-3 rounded-xl bg-rose-600 text-white text-center font-black text-sm shadow hover:bg-rose-700">🚑 Call 108 (Ambulance)</a>
+          <a href="tel:911" class="p-3 rounded-xl bg-slate-800 text-white text-center font-black text-sm shadow hover:bg-slate-900">📞 Call 911 (Global/US)</a>
+        </div>
+      </div>
+      <div class="bg-slate-100 px-6 py-3.5 flex justify-between items-center border-t border-slate-200">
+        <button onclick="playEmergencySiren()" class="text-xs font-bold text-red-600 hover:underline">🔊 Replay Siren Sound</button>
+        <button onclick="closeEmergencyModal()" class="px-5 py-2 rounded-xl bg-white border border-slate-300 text-slate-700 font-bold text-xs">Close Window</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="no-print relative z-10 bg-white border-t border-cyan-100 py-6 mt-12">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-2">
+      <div><b>AuraMed AI</b> — Intelligent Medical Help, Chatbot & Triage System (Minor Project 2026–2027)</div>
+      <div>White & Aqua Blue Clinical UI • Emergency Helpline: <b class="text-red-600">112 / 108</b></div>
+    </div>
+  </footer>
+
+  <!-- APPLICATION & CHATBOT LOGIC -->
+  <script>
+    function playEmergencySiren() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        const ctx = new AudioCtx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sawtooth';
+        const now = ctx.currentTime;
+        osc.frequency.setValueAtTime(880, now);
+        osc.frequency.setValueAtTime(659.25, now + 0.25);
+        osc.frequency.setValueAtTime(880, now + 0.5);
+        osc.frequency.setValueAtTime(659.25, now + 0.75);
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.exponentialRampToValueAtTime(0.008, now + 1.05);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 1.05);
+      } catch (e) {}
+    }
+
+    const MEDICINES = {
+      paracetamol: {
+        name: 'Paracetamol (Acetaminophen)',
+        brands: 'Crocin, Tylenol, Calpol, Dolo-650',
+        category: 'Analgesic & Antipyretic',
+        dose: '500mg – 650mg orally every 4–6 hours as needed (Max 4,000mg/24h)',
+        indications: ['Fever', 'Headache', 'Body Aches', 'Mild-to-Moderate Pain'],
+        precautions: 'Do not exceed 4g daily to prevent liver toxicity. Avoid alcohol.'
+      },
+      ibuprofen: {
+        name: 'Ibuprofen',
+        brands: 'Advil, Brufen, Motrin',
+        category: 'NSAID (Anti-Inflammatory)',
+        dose: '200mg – 400mg orally every 6–8 hours AFTER food (Max 1,200mg/day OTC)',
+        indications: ['Migraine', 'Muscle Sprain', 'Joint Pain', 'Inflammatory Pain'],
+        precautions: 'Always take with food/milk. Contraindicated in gastric ulcers, kidney disease, or NSAID allergy.'
+      },
+      cetirizine: {
+        name: 'Cetirizine Hydrochloride',
+        brands: 'Zyrtec, Cetzine, Alerid',
+        category: '2nd-Gen Antihistamine',
+        dose: '10mg orally once daily at bedtime',
+        indications: ['Allergic Rhinitis', 'Sneezing', 'Watery Eyes', 'Itchy Skin / Hives'],
+        precautions: 'May cause mild drowsiness; avoid driving if affected.'
+      },
+      antacid: {
+        name: 'Magaldrate + Simethicone Antacid Gel',
+        brands: 'Gelusil, Digene, Mylanta',
+        category: 'Antacid & Antiflatulent',
+        dose: '10–20 mL (2–4 tsp) orally 1 hour after meals and at bedtime',
+        indications: ['Heartburn', 'Acid Reflux / GERD', 'Sour Belching', 'Gas & Bloating'],
+        precautions: 'Keep a 2-hour gap from other oral medications.'
+      },
+      famotidine: {
+        name: 'Famotidine',
+        brands: 'Pepcid AC, Famocid-20',
+        category: 'H2-Receptor Blocker',
+        dose: '20mg orally once or twice daily before meals',
+        indications: ['Acid Indigestion', 'GERD', 'Gastritis'],
+        precautions: 'Consult doctor if heartburn persists beyond 14 days.'
+      },
+      ors: {
+        name: 'Oral Rehydration Salts (WHO ORS)',
+        brands: 'Electral, Pedialyte, Hydralyte',
+        category: 'Electrolyte Replenisher',
+        dose: 'Dissolve 1 packet in 1 Liter clean water; sip 200–400mL after every loose stool',
+        indications: ['Dehydration', 'Diarrhea', 'Vomiting', 'Heat Exhaustion'],
+        precautions: 'Discard prepared solution after 24 hours.'
+      },
+      guaifenesin: {
+        name: 'Guaifenesin Expectorant',
+        brands: 'Mucinex, Benylin Mucus',
+        category: 'Mucolytic / Expectorant',
+        dose: '200mg – 400mg every 4 hours with plenty of warm water',
+        indications: ['Chest Congestion', 'Wet Productive Cough'],
+        precautions: 'Drink warm fluids to assist mucus clearance.'
+      },
+      saline: {
+        name: 'Isotonic Saline Nasal Spray',
+        brands: 'Otrivin Saline, Sterimar',
+        category: 'Non-Medicated Decongestant',
+        dose: '2 sprays in each nostril 3–4 times daily',
+        indications: ['Blocked Nose', 'Sinus Congestion', 'Allergic Rhinitis'],
+        precautions: 'Safe for daily use without rebound congestion.'
+      },
+      hydrocortisone: {
+        name: 'Hydrocortisone 1% Topical Cream',
+        brands: 'Cortizone-10, DermAid',
+        category: 'Mild Topical Corticosteroid',
+        dose: 'Apply a thin layer to itchy rash 1–2 times daily (up to 7 days)',
+        indications: ['Contact Dermatitis', 'Eczema', 'Insect Bites', 'Localized Rash'],
+        precautions: 'Do not apply on open wounds, face, or fungal infections.'
+      }
+    };
+
+    const RED_FLAGS = [
+      {
+        condition: 'Suspected Acute Coronary Syndrome / Heart Attack',
+        keywords: ['chest pain', 'crushing chest', 'left arm', 'jaw pain', 'heart attack', 'chest pressure', 'tightness in chest', 'cold sweats'],
+        summary: 'Crushing or radiating chest pain with sweats or breathlessness indicates a potential Myocardial Infarction (Heart Attack). Immediate hospital ECG & intervention required.',
+        steps: [
+          'Stop all activity immediately; sit down in a half-upright resting posture.',
+          'Loosen tight clothing around neck and waist.',
+          'Call Emergency Ambulance (112 / 108 / 911) immediately—do NOT drive yourself.',
+          'If not allergic to aspirin, slowly chew one 300mg Aspirin tablet while awaiting paramedics.'
+        ]
+      },
+      {
+        condition: 'Suspected Acute Brain Stroke (FAST Protocol)',
+        keywords: ['slurred speech', 'facial drooping', 'face drooping', 'weakness on right arm', 'weakness on left arm', 'one side paralyzed', 'stroke', 'sudden numbness'],
+        summary: 'Sudden facial droop, arm weakness, or slurred speech indicates an acute cerebrovascular stroke. Brain tissue must be saved within the golden window.',
+        steps: [
+          'Call 112 / 108 / 911 immediately and note the exact time symptoms started.',
+          'Keep the patient lying on their side with head slightly supported.',
+          'DO NOT give food, water, or aspirin (must rule out hemorrhagic stroke via CT scan first).'
+        ]
+      },
+      {
+        condition: 'Acute Surgical Abdomen / Suspected Appendicitis',
+        keywords: ['severe lower right abdominal pain', 'rigid belly', 'rebound tenderness', 'appendicitis', 'vomiting blood', 'black tarry stool'],
+        summary: 'Severe localized abdominal pain with rigidity and fever suggests acute appendicitis or peritoneal emergency requiring surgical evaluation.',
+        steps: [
+          'Proceed immediately to a hospital surgical emergency room.',
+          'DO NOT eat or drink anything (in case urgent surgery/anesthesia is needed).',
+          'DO NOT apply heating pads to the abdomen (can trigger appendix rupture).'
+        ]
+      },
+      {
+        condition: 'Severe Respiratory Distress / Anaphylactic Shock',
+        keywords: ['cannot breathe', 'gasping for air', 'blue lips', 'throat swelling', 'anaphylaxis', 'swollen tongue'],
+        summary: 'Acute airway compromise or cyanosis is an immediate threat to life.',
+        steps: [
+          'If allergic anaphylaxis, inject Epinephrine (EpiPen) into outer mid-thigh immediately.',
+          'Sit upright leaning slightly forward to assist breathing.',
+          'Call emergency ambulance services immediately.'
+        ]
+      }
+    ];
+
+    const CONDITIONS = [
+      {
+        name: 'Common Cold & Allergic Rhinitis',
+        category: 'Respiratory & ENT',
+        specialist: 'General Physician / ENT Specialist',
+        keywords: ['sneezing', 'runny nose', 'watery eyes', 'itchy throat', 'blocked nose', 'cold', 'sore throat', 'stuffy nose'],
+        overview: 'Upper respiratory mucosal inflammation triggered by viral pathogens or environmental allergens.',
+        meds: [MEDICINES.cetirizine, MEDICINES.paracetamol, MEDICINES.saline],
+        homeCare: ['Steam inhalation twice daily for 10 minutes.', 'Warm salt-water gargles 3 times daily.', 'Drink warm water, ginger tea, and broths.'],
+        escalate: ['Fever rises above 102°F or lasts > 3 days.', 'Shortness of breath or wheezing develops.']
+      },
+      {
+        name: 'Influenza (Acute Viral Flu)',
+        category: 'Infectious & Respiratory',
+        specialist: 'Internal Medicine / General Physician',
+        keywords: ['high fever', 'fever', 'body aches', 'shivering', 'chills', 'dry cough', 'flu', 'fatigue', 'weakness'],
+        overview: 'Acute systemic viral infection marked by sudden high fever, shivering chills, and generalized muscle aches (myalgia).',
+        meds: [MEDICINES.paracetamol, MEDICINES.ors, MEDICINES.guaifenesin],
+        homeCare: ['Complete bed rest in a well-ventilated room.', 'Sip Oral Rehydration Salts (ORS) and warm clear fluids continuously.', 'Lukewarm sponge bath if fever spikes.'],
+        escalate: ['Difficulty breathing or chest pain.', 'Oxygen saturation (SpO2) falls below 94%.', 'Persistent high fever beyond 72 hours.']
+      },
+      {
+        name: 'Gastroesophageal Reflux Disease (GERD) / Acidity',
+        category: 'Gastrointestinal',
+        specialist: 'Gastroenterologist',
+        keywords: ['burning chest', 'burning stomach', 'sour belching', 'acid regurgitation', 'heartburn', 'acidity', 'oily food', 'spicy food', 'gas', 'indigestion'],
+        overview: 'Retrograde flow of gastric acid into the esophagus causing retrosternal burning and sour regurgitation.',
+        meds: [MEDICINES.antacid, MEDICINES.famotidine],
+        homeCare: ['Do not lie down within 2.5 hours after eating.', 'Elevate the head of your bed by 6 inches.', 'Avoid spicy, deep-fried, citrus, and caffeinated items.'],
+        escalate: ['Pain radiates to jaw, neck, or left arm (rule out cardiac issue).', 'Difficulty swallowing or black stools.']
+      },
+      {
+        name: 'Migraine / Tension-Type Headache',
+        category: 'Neurological',
+        specialist: 'Neurologist',
+        keywords: ['throbbing headache', 'one-sided', 'migraine', 'headache', 'sensitivity to bright light', 'light sensitivity', 'forehead pain'],
+        overview: 'Neurovascular or muscular headache disorder characterized by unilateral throbbing or bilateral tight band-like head pain.',
+        meds: [MEDICINES.ibuprofen, MEDICINES.paracetamol],
+        homeCare: ['Rest in a quiet, darkened room.', 'Apply a cold gel pack across forehead/temples for 15 minutes.', 'Maintain steady hydration and regular sleep hours.'],
+        escalate: ['Sudden explosive "thunderclap" headache.', 'Headache accompanied by high fever, stiff neck, or vision loss.']
+      },
+      {
+        name: 'Acute Gastroenteritis / Food Poisoning',
+        category: 'Gastrointestinal',
+        specialist: 'General Physician / Gastroenterologist',
+        keywords: ['watery diarrhea', 'diarrhea', 'stomach cramps', 'vomiting', 'nausea', 'dehydration', 'loose motions', 'food poisoning'],
+        overview: 'Acute microbial or toxin-induced inflammation of the gastrointestinal tract leading to fluid and electrolyte loss.',
+        meds: [MEDICINES.ors, MEDICINES.paracetamol],
+        homeCare: ['Sip WHO ORS solution after every loose stool.', 'Follow bland BRAT diet (Bananas, Rice, Applesauce, Toast).', 'Strictly avoid dairy, street food, and spicy meals.'],
+        escalate: ['Signs of severe dehydration (sunken eyes, dizziness, no urine output).', 'Blood in stool or intractable vomiting > 24 hours.']
+      },
+      {
+        name: 'Contact Dermatitis / Allergic Skin Rash',
+        category: 'Dermatology',
+        specialist: 'Dermatologist',
+        keywords: ['itchy rash', 'hives', 'red patches', 'skin allergy', 'itching', 'rash'],
+        overview: 'Localized inflammatory skin reaction triggered by allergens, insect bites, or contact irritants.',
+        meds: [MEDICINES.cetirizine, MEDICINES.hydrocortisone],
+        homeCare: ['Apply cool wet compresses to soothe itching.', 'Wear loose breathable cotton clothes.', 'Avoid scratching to prevent secondary bacterial infection.'],
+        escalate: ['Swelling of lips, tongue, or difficulty breathing.', 'Pus oozing or rapidly spreading redness.']
+      }
+    ];
+
+    const BODY_MAP_DATA = [
+      { region: '🧠 Head & Brain', items: ['Throbbing headache', 'Sensitivity to bright light', 'Dizziness', 'Facial drooping', 'Slurred speech'] },
+      { region: '🫀 Throat & Chest', items: ['Crushing chest pain', 'Left arm radiation', 'Burning chest', 'Dry cough', 'Sore throat', 'Cannot breathe'] },
+      { region: '💧 Stomach & Abdomen', items: ['Watery diarrhea', 'Stomach cramps', 'Sour belching', 'Vomiting', 'Severe lower right abdominal pain'] },
+      { region: '🌡️ General & Skin', items: ['High fever', 'Body aches', 'Shivering', 'Sneezing', 'Runny nose', 'Itchy rash'] }
+    ];
+
+    let selectedBodySymptoms = [];
+    let activeRedFlag = null;
+
+    // CHATBOT STATE
+    const DEFAULT_CHAT = [
+      {
+        sender: 'bot',
+        html: `Hello! I am <b>Dr. Aura</b>, your 24/7 AI Medical & Clinical Triage Assistant. 🩺<br><br>Tell me your symptoms, ask about any medicine dosage, or describe how you feel. I will diagnose probable conditions, suggest safe OTC medicines, and alert you immediately if there is a <b>Critical Red Flag</b>!`
+      }
+    ];
+    let chatMessages = [...DEFAULT_CHAT];
+
+    function toggleFloatingChat(open) {
+      document.getElementById('chatbot-launcher-btn').classList.toggle('hidden', open);
+      document.getElementById('floating-chat-window').classList.toggle('hidden', !open);
+      if (open) renderChatMessages();
+    }
+
+    function clearChatMessages() {
+      chatMessages = [...DEFAULT_CHAT];
+      renderChatMessages();
+    }
+
+    function sendChatFromInput(inputId) {
+      const inp = document.getElementById(inputId);
+      const val = inp.value.trim();
+      if (!val) return;
+      inp.value = '';
+      sendChatMessage(val);
+    }
+
+    function sendChatMessage(text) {
+      chatMessages.push({ sender: 'user', html: text });
+      chatMessages.push({ sender: 'typing' });
+      renderChatMessages();
+
+      setTimeout(() => {
+        chatMessages = chatMessages.filter(m => m.sender !== 'typing');
+        const q = text.toLowerCase();
+
+        // Check if asking about a specific medicine
+        const med = Object.values(MEDICINES).find(m =>
+          q.includes(m.name.toLowerCase().split(' ')[0]) ||
+          m.brands.toLowerCase().split(',').some(b => q.includes(b.trim().toLowerCase()))
+        );
+
+        if (med && (q.includes('dose') || q.includes('dosage') || q.includes('safe') || q.includes('what is'))) {
+          chatMessages.push({
+            sender: 'bot',
+            html: `<b>💊 Pharmacology Profile: ${med.name}</b><br><span class="text-xs text-slate-500">Brands: ${med.brands} (${med.category})</span><div class="mt-2 p-2.5 rounded-xl bg-cyan-50 border border-cyan-200 text-cyan-950 font-semibold text-xs"><b>Adult Dosage:</b> ${med.dose}</div><div class="mt-1 text-xs text-slate-600"><b>Precautions:</b> ${med.precautions}</div>`
+          });
+          renderChatMessages();
+          return;
+        }
+
+        // Check Red Flags
+        const rf = RED_FLAGS.find(r => r.keywords.some(k => q.includes(k)));
+        if (rf) {
+          activeRedFlag = rf;
+          playEmergencySiren();
+          chatMessages.push({
+            sender: 'bot',
+            html: `<div class="p-3 rounded-xl bg-red-50 border-2 border-red-400 text-red-950 space-y-2">
+              <span class="px-2 py-0.5 rounded bg-red-600 text-white font-mono text-[10px] font-black uppercase">🚨 CRITICAL RED FLAG DETECTED</span>
+              <div class="font-black text-sm text-red-900">${rf.condition}</div>
+              <p class="text-xs text-red-800">${rf.summary}</p>
+              <p class="text-xs font-bold text-red-900 underline">DO NOT self-medicate. Go to the nearest Doctor / Hospital ER immediately!</p>
+              <button onclick="openEmergencyModal()" class="w-full py-2 rounded-xl bg-red-600 text-white font-black text-xs shadow">🚑 Open Emergency Protocol & Helplines</button>
+            </div>`
+          });
+          renderChatMessages();
+          return;
+        }
+
+        // Score Conditions
+        let best = CONDITIONS[0];
+        let max = -1;
+        CONDITIONS.forEach(c => {
+          let s = 0;
+          c.keywords.forEach(k => { if (q.includes(k)) s += 20; });
+          if (s > max) { max = s; best = c; }
+        });
+        const conf = max > 0 ? Math.min(72 + max, 95) : 68;
+
+        chatMessages.push({
+          sender: 'bot',
+          html: `<div class="space-y-2">
+            <div class="flex items-center justify-between border-b border-cyan-100 pb-1.5">
+              <span class="font-black text-cyan-950 text-sm">${best.name}</span>
+              <span class="px-2 py-0.5 rounded bg-cyan-50 text-cyan-800 font-mono font-bold text-[11px] border border-cyan-200">${conf}% Match</span>
+            </div>
+            <p class="text-xs text-slate-600">${best.overview}</p>
+            <div class="space-y-1">
+              <span class="text-[10px] font-bold uppercase text-cyan-700 block">💊 Suggested OTC Medicines:</span>
+              ${best.meds.map(m => `<div class="p-2 rounded-lg bg-cyan-50/70 border border-cyan-100 text-xs"><b>${m.name}:</b> ${m.dose}</div>`).join('')}
+            </div>
+            <div class="text-[11px] text-slate-500 pt-1">Recommended Specialist: <b class="text-slate-800">${best.specialist}</b></div>
+          </div>`
+        });
+        renderChatMessages();
+      }, 600);
+    }
+
+    function renderChatMessages() {
+      const html = chatMessages.map(m => {
+        if (m.sender === 'typing') {
+          return `<div class="flex items-center space-x-1.5 bg-white border border-cyan-100 px-4 py-3 rounded-2xl w-fit shadow-sm">
+            <span class="w-2 h-2 rounded-full bg-cyan-500 dot-1"></span>
+            <span class="w-2 h-2 rounded-full bg-cyan-500 dot-2"></span>
+            <span class="w-2 h-2 rounded-full bg-cyan-500 dot-3"></span>
+            <span class="text-xs text-slate-400 ml-2">Dr. Aura is analyzing...</span>
+          </div>`;
+        }
+        const isUser = m.sender === 'user';
+        return `<div class="flex ${isUser ? 'justify-end' : 'justify-start'} animate-fade-in-up">
+          <div class="max-w-[85%] p-3.5 rounded-2xl text-xs sm:text-sm shadow-sm ${isUser ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-tr-none font-medium' : 'bg-white border border-cyan-100 text-slate-800 rounded-tl-none'}">
+            ${m.html}
+          </div>
+        </div>`;
+      }).join('');
+
+      ['floating-chat-messages', 'page-chat-messages'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.innerHTML = html;
+          el.scrollTop = el.scrollHeight;
+        }
+      });
+    }
+
+    function updateSeverityLabel(val) {
+      const lbl = document.getElementById('severity-label');
+      if (val <= 3) {
+        lbl.textContent = `${val} / 10 (Mild)`;
+        lbl.className = 'px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-mono text-xs';
+      } else if (val <= 7) {
+        lbl.textContent = `${val} / 10 (Moderate)`;
+        lbl.className = 'px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-mono text-xs';
+      } else {
+        lbl.textContent = `🚨 ${val} / 10 (Severe / Critical)`;
+        lbl.className = 'px-2 py-0.5 rounded bg-red-600 text-white font-mono text-xs font-bold';
+      }
+    }
+
+    function loadSample(text, sev) {
+      document.getElementById('symptom-textarea').value = text;
+      document.getElementById('severity-slider').value = sev;
+      updateSeverityLabel(sev);
+    }
+
+    function resetForm() {
+      document.getElementById('symptom-textarea').value = '';
+      document.getElementById('severity-slider').value = 4;
+      updateSeverityLabel(4);
+      selectedBodySymptoms = [];
+      renderBodyMapPills();
+      renderBodyMapGrid();
+      document.getElementById('top-emergency-banner').classList.add('hidden');
+    }
+
+    function switchTab(tabId) {
+      ['triage', 'chatbot', 'bodymap', 'safety', 'redflags', 'history'].forEach(t => {
+        document.getElementById(`tab-${t}`).classList.add('hidden');
+        const btn = document.getElementById(`nav-${t}`);
+        if (btn) btn.className = 'px-3.5 py-2 rounded-xl text-xs xl:text-sm font-semibold text-slate-600 hover:text-cyan-600 transition-all hover:-translate-y-0.5';
+      });
+      document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+      const activeBtn = document.getElementById(`nav-${tabId}`);
+      if (activeBtn) activeBtn.className = 'px-3.5 py-2 rounded-xl text-xs xl:text-sm font-bold bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-sm transition-all hover:-translate-y-0.5';
+      if (tabId === 'history') renderHistory();
+      if (tabId === 'chatbot') renderChatMessages();
+    }
+
+    function toggleBodySymptom(sym) {
+      if (selectedBodySymptoms.includes(sym)) {
+        selectedBodySymptoms = selectedBodySymptoms.filter(s => s !== sym);
+      } else {
+        selectedBodySymptoms.push(sym);
+      }
+      renderBodyMapGrid();
+      renderBodyMapPills();
+    }
+
+    function renderBodyMapPills() {
+      const box = document.getElementById('selected-bodymap-pills');
+      if (selectedBodySymptoms.length === 0) {
+        box.classList.add('hidden');
+        return;
+      }
+      box.classList.remove('hidden');
+      box.innerHTML = `<span class="text-xs font-bold text-cyan-800 uppercase">Selected via Body Map:</span>` +
+        selectedBodySymptoms.map(s => `<span class="bg-white text-cyan-700 text-xs font-bold px-2.5 py-1 rounded-lg border border-cyan-200">${s}</span>`).join('');
+    }
+
+    function renderBodyMapGrid() {
+      const grid = document.getElementById('bodymap-grid');
+      grid.innerHTML = BODY_MAP_DATA.map(group => `
+        <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3 hover-lift-card">
+          <h3 class="font-black text-slate-900 text-base">${group.region}</h3>
+          <div class="space-y-2">
+            ${group.items.map(item => {
+              const checked = selectedBodySymptoms.includes(item);
+              return `<button onclick="toggleBodySymptom('${item}')" class="w-full text-left px-3.5 py-2.5 rounded-xl border text-xs sm:text-sm font-semibold flex justify-between items-center transition-all hover-pill-glow ${checked ? 'bg-cyan-600 text-white border-cyan-600 shadow' : 'bg-white text-slate-700 border-slate-200 hover:border-cyan-300'}">
+                <span>${item}</span>
+                <span>${checked ? '✓' : '+'}</span>
+              </button>`;
+            }).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderMedicineDirectory() {
+      const grid = document.getElementById('medicine-directory-grid');
+      grid.innerHTML = Object.values(MEDICINES).map(m => `
+        <div class="p-5 rounded-2xl border border-cyan-100 bg-white shadow-sm space-y-2 hover-lift-card">
+          <div class="flex justify-between items-start">
+            <div>
+              <h4 class="font-black text-slate-900 text-base">${m.name}</h4>
+              <p class="text-xs text-slate-500">Brands: ${m.brands}</p>
+            </div>
+            <span class="text-[11px] font-bold bg-cyan-100 text-cyan-800 px-2.5 py-0.5 rounded-full">${m.category}</span>
+          </div>
+          <p class="text-xs font-semibold text-slate-800 bg-slate-50 p-2.5 rounded-xl border border-slate-200"><b>Dosage:</b> ${m.dose}</p>
+          <p class="text-xs text-slate-600"><b>Precautions:</b> ${m.precautions}</p>
+        </div>
+      `).join('');
+    }
+
+    function runDiagnosis() {
+      const rawText = document.getElementById('symptom-textarea').value.trim();
+      const combined = (rawText + ' ' + selectedBodySymptoms.join(' ')).toLowerCase();
+      if (!combined.trim()) {
+        alert('Please enter your symptoms or select from the quick demo buttons.');
+        return;
+      }
+
+      const severity = Number(document.getElementById('severity-slider').value);
+      const duration = document.getElementById('duration-select').value;
+      const age = document.getElementById('patient-age').value;
+      const allergies = Array.from(document.querySelectorAll('.allergy-checkbox:checked')).map(cb => cb.value);
+
+      const matchedRF = RED_FLAGS.find(rf => rf.keywords.some(k => combined.includes(k)));
+      const isEmergency = Boolean(matchedRF) || (severity >= 9 && (combined.includes('chest') || combined.includes('breath') || combined.includes('unconscious')));
+
+      let bestCond = CONDITIONS[0];
+      let maxScore = -1;
+      CONDITIONS.forEach(c => {
+        let sc = 0;
+        c.keywords.forEach(k => { if (combined.includes(k)) sc += 20; });
+        if (sc > maxScore) { maxScore = sc; bestCond = c; }
+      });
+
+      const confidence = maxScore > 0 ? Math.min(68 + maxScore, 95) : 65;
+
+      const record = {
+        date: new Date().toLocaleString(),
+        complaint: rawText || selectedBodySymptoms.join(', '),
+        conditionName: isEmergency ? (matchedRF ? matchedRF.condition : 'Acute Critical Emergency') : bestCond.name,
+        isEmergency,
+        confidence,
+        severity
+      };
+      const hist = JSON.parse(localStorage.getItem('auramed_standalone_history') || '[]');
+      hist.unshift(record);
+      localStorage.setItem('auramed_standalone_history', JSON.stringify(hist.slice(0, 20)));
+
+      const resDiv = document.getElementById('result-view');
+      document.getElementById('input-view').classList.add('hidden');
+      resDiv.classList.remove('hidden');
+
+      if (isEmergency) {
+        activeRedFlag = matchedRF || RED_FLAGS[0];
+        document.getElementById('top-emergency-banner').classList.remove('hidden');
+        document.getElementById('banner-condition-text').textContent = `${activeRedFlag.condition} — Immediate Doctor / Hospital ER Required!`;
+        playEmergencySiren();
+        openEmergencyModal();
+      } else {
+        document.getElementById('top-emergency-banner').classList.add('hidden');
+      }
+
+      const medsHtml = isEmergency
+        ? `<div class="p-6 rounded-2xl bg-red-50 border-2 border-red-400 text-red-900 space-y-2">
+            <h4 class="font-black text-base">⚠️ Self-Medication Withheld Due to Critical Emergency Status</h4>
+            <p class="text-sm">Because critical red-flag symptoms are present, taking unverified oral painkillers may mask symptoms or complicate emergency hospital care. <b>Consult an Emergency Physician immediately.</b></p>
+          </div>`
+        : `<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            ${bestCond.meds.map(m => {
+              let unsafe = false;
+              let warnNote = '';
+              if (allergies.includes('Aspirin / NSAIDs') && m.category.includes('NSAID')) {
+                unsafe = true; warnNote = 'CONTRAINDICATED: Patient is allergic to NSAIDs / Aspirin!';
+              }
+              if (allergies.includes('Paracetamol') && m.name.includes('Paracetamol')) {
+                unsafe = true; warnNote = 'CONTRAINDICATED: Patient is allergic to Paracetamol!';
+              }
+              if ((allergies.includes('Gastric Ulcer') || allergies.includes('Kidney Disease')) && m.category.includes('NSAID')) {
+                unsafe = true; warnNote = 'CONTRAINDICATED: Avoid NSAIDs in Gastric Ulcer / Kidney Disease!';
+              }
+              return `<div class="p-5 rounded-2xl border hover-lift-card ${unsafe ? 'bg-red-50 border-red-400' : 'bg-white border-cyan-100 shadow-sm'} space-y-2">
+                ${unsafe ? `<div class="bg-red-600 text-white text-xs font-black px-3 py-1 rounded-lg">🚫 ${warnNote}</div>` : `<div class="text-xs font-bold text-emerald-700 bg-emerald-50 inline-block px-2.5 py-0.5 rounded-full border border-emerald-200">✓ Safe for Profile</div>`}
+                <h4 class="text-lg font-black text-slate-900">${m.name}</h4>
+                <p class="text-xs text-slate-500">Common Brands: <b>${m.brands}</b></p>
+                <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-800">
+                  <span class="text-cyan-700 uppercase block text-[10px] font-bold">Recommended Adult Dosage:</span>
+                  ${m.dose}
+                </div>
+                <p class="text-xs text-slate-500"><b>Precautions:</b> ${m.precautions}</p>
+              </div>`;
+            }).join('')}
+          </div>`;
+
+      resDiv.innerHTML = `
+        ${isEmergency ? `
+          <div class="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-red-600 via-rose-600 to-red-700 text-white shadow-2xl border-4 border-red-300 emergency-pulse space-y-4">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div class="space-y-1">
+                <span class="px-3 py-1 rounded-full bg-white text-red-700 font-mono text-xs font-black uppercase">🚨 CRITICAL RED FLAG DETECTED</span>
+                <h2 class="text-2xl sm:text-3xl font-black mt-2">URGENT: Go to Nearest Doctor / Hospital ER Immediately</h2>
+                <p class="text-sm text-red-100">${activeRedFlag.summary}</p>
+              </div>
+              <div class="flex flex-col gap-2 shrink-0">
+                <button onclick="openEmergencyModal()" class="px-6 py-3 rounded-2xl bg-white text-red-700 font-black text-sm shadow-lg hover:scale-105 transition-all">VIEW FIRST-AID & HELPLINES</button>
+                <a href="tel:112" class="px-6 py-2.5 rounded-2xl bg-red-900 text-white font-bold text-xs text-center border border-red-400">📞 CALL 112 / 108 AMBULANCE</a>
+              </div>
+            </div>
+          </div>
+        ` : ''}
+
+        <div class="no-print flex flex-wrap items-center justify-between gap-3 bg-white p-4 rounded-2xl border border-cyan-100 shadow-sm">
+          <button onclick="backToInput()" class="text-sm font-bold text-slate-600 hover:text-cyan-700 px-3 py-1.5 rounded-xl hover:bg-cyan-50">← New Symptom Assessment</button>
+          <div class="flex items-center space-x-2">
+            <button onclick="window.print()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold border border-slate-200">🖨️ Print Clinical Report</button>
+            <span class="px-3 py-1.5 rounded-xl text-xs font-black text-white ${isEmergency ? 'bg-red-600' : 'bg-cyan-600'}">
+              ${isEmergency ? '🚨 CRITICAL EMERGENCY' : '✓ CLINICAL TRIAGE COMPLETE'}
+            </span>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-3xl border border-cyan-100 shadow-xl overflow-hidden hover-lift-card">
+          <div class="bg-gradient-to-r from-cyan-600 via-sky-600 to-blue-700 text-white p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider bg-white/20 px-3 py-1 rounded-full">${isEmergency ? 'Emergency Triage Priority' : bestCond.category}</span>
+              <h2 class="text-2xl sm:text-4xl font-black mt-2">${isEmergency ? activeRedFlag.condition : bestCond.name}</h2>
+              <p class="text-xs text-cyan-100 mt-1">Patient Age: ${age} yrs • Duration: ${duration} • Discomfort: ${severity}/10</p>
+            </div>
+            <div class="bg-white/15 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/20 text-right shrink-0">
+              <span class="text-xs text-cyan-100 block">AI Confidence</span>
+              <span class="text-3xl font-black font-mono">${confidence}%</span>
+            </div>
+          </div>
+
+          <div class="p-6 sm:p-8 space-y-6">
+            <div>
+              <h3 class="text-xs font-black uppercase text-slate-400 tracking-wider">Clinical Overview & Reasoning</h3>
+              <p class="text-sm sm:text-base text-slate-700 font-medium mt-1">${isEmergency ? activeRedFlag.summary : bestCond.overview}</p>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-cyan-50/70 border border-cyan-200 flex items-center justify-between">
+              <div>
+                <span class="text-xs font-bold text-cyan-800 uppercase block">Recommended Medical Specialist</span>
+                <span class="text-base font-black text-slate-900">${isEmergency ? 'Emergency Medicine Physician / Trauma Team' : bestCond.specialist}</span>
+              </div>
+              <span class="text-xs font-bold bg-white text-cyan-700 px-3 py-1.5 rounded-xl border border-cyan-200">Doctor Referral</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <h3 class="text-2xl font-black text-slate-900">💊 Suggested Over-The-Counter Medicines</h3>
+          ${medsHtml}
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="bg-white p-6 rounded-3xl border border-cyan-100 shadow-lg space-y-3 hover-lift-card">
+            <h4 class="font-black text-cyan-900 text-base">🏡 Supportive Home Care & Recovery</h4>
+            <ul class="space-y-2 text-sm text-slate-700 list-disc list-inside">
+              ${(isEmergency ? activeRedFlag.steps : bestCond.homeCare).map(s => `<li>${s}</li>`).join('')}
+            </ul>
+          </div>
+          <div class="bg-white p-6 rounded-3xl border border-amber-200 shadow-lg space-y-3 hover-lift-card">
+            <h4 class="font-black text-amber-900 text-base">⚠️ When to See a Doctor Immediately</h4>
+            <ul class="space-y-2 text-sm text-amber-950 list-disc list-inside">
+              ${(isEmergency ? ['Immediate emergency room evaluation is mandatory right now.'] : bestCond.escalate).map(s => `<li>${s}</li>`).join('')}
+            </ul>
+          </div>
+        </div>
+      `;
+    }
+
+    function backToInput() {
+      document.getElementById('result-view').classList.add('hidden');
+      document.getElementById('input-view').classList.remove('hidden');
+    }
+
+    function openEmergencyModal() {
+      const rf = activeRedFlag || RED_FLAGS[0];
+      document.getElementById('modal-rf-condition').textContent = rf.condition;
+      document.getElementById('modal-rf-summary').textContent = rf.summary;
+      document.getElementById('modal-rf-steps').innerHTML = rf.steps.map((s, i) => `
+        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-start space-x-2.5">
+          <span class="w-5 h-5 rounded-full bg-red-600 text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">${i + 1}</span>
+          <span>${s}</span>
+        </div>
+      `).join('');
+      document.getElementById('emergency-modal').classList.remove('hidden');
+    }
+
+    function closeEmergencyModal() {
+      document.getElementById('emergency-modal').classList.add('hidden');
+    }
+
+    function renderHistory() {
+      const list = document.getElementById('history-list');
+      const hist = JSON.parse(localStorage.getItem('auramed_standalone_history') || '[]');
+      if (hist.length === 0) {
+        list.innerHTML = `<p class="text-sm text-slate-400 py-8 text-center">No consultation records saved yet.</p>`;
+        return;
+      }
+      list.innerHTML = hist.map(h => `
+        <div class="p-4 rounded-2xl border hover-lift-card ${h.isEmergency ? 'bg-red-50/50 border-red-300' : 'bg-slate-50 border-slate-200'} flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="font-black text-slate-900 text-sm">${h.conditionName}</span>
+              ${h.isEmergency ? '<span class="text-[10px] font-black bg-red-600 text-white px-2 py-0.5 rounded">RED FLAG</span>' : ''}
+            </div>
+            <p class="text-xs text-slate-600 mt-0.5">"${h.complaint}"</p>
+            <span class="text-[11px] text-slate-400">${h.date} • Severity: ${h.severity}/10 • Confidence: ${h.confidence}%</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function clearHistory() {
+      localStorage.removeItem('auramed_standalone_history');
+      renderHistory();
+    }
+
+    renderBodyMapGrid();
+    renderMedicineDirectory();
+    renderChatMessages();
+  </script>
+</body>
+</html>
